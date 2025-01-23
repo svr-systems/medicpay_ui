@@ -1,4 +1,4 @@
-export const APP_VERSION = "v1.25.01.22";
+export const APP_VERSION = "v1.25.01.23";
 export const APP_NAME = "MEDICPAY";
 
 const URL = "http://127.0.0.1:8000";
@@ -9,6 +9,12 @@ export const ROUTES = [
     link: "home",
     title: "Inicio",
     icon: "mdi-home",
+    show: true,
+  },
+  {
+    link: "hospitals",
+    title: "Hospitales",
+    icon: "mdi-hospital-building",
     show: true,
   },
   {

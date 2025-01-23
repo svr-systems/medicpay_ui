@@ -5,6 +5,53 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 const routes = [
+  //hospitals
+  {
+    path: "/hospitales",
+    name: "hospitals",
+    component: () => import("@/views/hospitals/Index.vue"),
+    meta: {
+      title: "Hospitales",
+      icon: "mdi-hospital-building",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/hospitales/agregar",
+    name: "hospitals.store",
+    component: () => import("@/views/hospitals/StoreUpdate.vue"),
+    meta: {
+      title: "Hospital | Agregar",
+      icon: "mdi-hospital-building",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/hospitales/:id",
+    name: "hospitals.show",
+    component: () => import("@/views/hospitals/Show.vue"),
+    meta: {
+      title: "Hospital",
+      icon: "mdi-hospital-building",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
+  {
+    path: "/hospitales/:id/editar",
+    name: "hospitals.update",
+    component: () => import("@/views/hospitals/StoreUpdate.vue"),
+    meta: {
+      title: "Hospital | Editar",
+      icon: "mdi-hospital-building",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
   //configurations
   {
     path: "/configuracion",
