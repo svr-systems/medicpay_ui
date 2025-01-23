@@ -1,7 +1,6 @@
-export const APP_VERSION = "v1.25.01.01";
-export const APP_NAME = "SVR-APP";
+export const APP_VERSION = "v1.25.01.22";
+export const APP_NAME = "MEDICPAY";
 
-// const URL = "https://svr.com.mx/serv";
 const URL = "http://127.0.0.1:8000";
 export const URL_API = URL + "/api";
 
@@ -10,12 +9,6 @@ export const ROUTES = [
     link: "home",
     title: "Inicio",
     icon: "mdi-home",
-    show: true,
-  },
-  {
-    link: "examples",
-    title: "Ejemplos",
-    icon: "mdi-tag-multiple",
     show: true,
   },
   {
@@ -79,19 +72,19 @@ export const getDateTime = (sprDate = "-", sprBwn = " ", sprTime = ":") => {
 
 export const getRules = () => {
   return {
-    required: [(v) => !!v || "Campo requerido."],
+    required: [(v) => !!v || v == 0 || "Campo requerido."],
     requiredTxt: [
       (v) => !!v || "Campo requerido.",
       (v) => (v && v.trim().length >= 2) || "Mínimo 2 caracteres.",
     ],
     email: [
       (v) => !!v || "Campo requerido.",
-      (v) => (v && v.length <= 50) || "Máximo 50 caracteres.",
+      (v) => (v && v.length <= 65) || "Máximo 65 caracteres.",
       (v) => /.+@.+\..+/.test(v) || "Formato invalido.",
     ],
     emailNR: [
       (v) => {
-        if (v) return (v && v.length <= 50) || "Máximo 50 caracteres.";
+        if (v) return (v && v.length <= 65) || "Máximo 65 caracteres.";
         else return true;
       },
       (v) => {
@@ -124,14 +117,30 @@ export const getRules = () => {
     ],
     imgLmt: [
       (v) => !!v || "Campo requerido.",
-      (v) => (v && v.size <= 3145728) || "El tamaño máximo de carga es de 3MB",
+      (v) => (v && v.size <= 2097152) || "El tamaño máximo de carga es de 2MB",
     ],
     imgLmtNR: [
       (v) => {
         if (v)
           return (
-            (v && v.size <= 3145728) || "El tamaño máximo de carga es de 3MB"
+            (v && v.size <= 2097152) || "El tamaño máximo de carga es de 2MB"
           );
+        else return true;
+      },
+    ],
+    fiscalCode: [
+      (v) => !!v || "Campo requerido.",
+      (v) => (v && v.length <= 13) || "Máximo 13 caracteres.",
+      (v) => /^[A-Za-zñÑ&]{3,4}\d{6}\w{3}$/.test(v) || "Formato invalido.",
+    ],
+    fiscalCodeNR: [
+      (v) => {
+        if (v) return (v && v.length <= 13) || "Máximo 13 caracteres.";
+        else return true;
+      },
+      (v) => {
+        if (v)
+          return /^[A-Za-zñÑ&]{3,4}\d{6}\w{3}$/.test(v) || "Formato invalido.";
         else return true;
       },
     ],
@@ -148,12 +157,16 @@ export const getObj = (data, store = false) => {
   return obj;
 };
 
-export const getDocs = (obj, prop, subprop) => {
-  for (let item of obj[prop]) {
-    obj[prop.substring(0, prop.length - 1) + "_doc_" + i] = item[subprop];
-    i++;
-  }
+export const getPropDocs = (obj, prop, subprop) => {
+  obj[prop].forEach(function (item, i) {
+    obj[subprop + "_" + i] = item[subprop];
+  });
 
+  return obj;
+};
+
+export const getPropDoc = (obj, prop, subprop) => {
+  obj[prop + "_" + subprop] = obj[prop][subprop];
   return obj;
 };
 
@@ -168,7 +181,13 @@ export const getFormData = (data) => {
     ) {
       form_data.append(key, JSON.stringify(data[key]));
     } else {
-      form_data.append(key, data[key]);
+      form_data.append(
+        key,
+        data[key] == null ||
+          (typeof data[key] == "string" && data[key].trim() == "")
+          ? ""
+          : data[key]
+      );
     }
   });
 

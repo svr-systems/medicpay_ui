@@ -31,31 +31,31 @@
               </v-card-title>
               <v-card-text>
                 <v-row dense>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-text-field
                       v-model="item.name"
                       label="Nombre"
                       dense
                       outlined
                       type="text"
-                      :rules="rules.required"
+                      :rules="rules.requiredTxt"
                       maxlength="50"
                       counter
                     />
                   </v-col>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-text-field
                       v-model="item.surname_p"
                       label="A. paterno"
                       dense
                       outlined
                       type="text"
-                      :rules="rules.required"
+                      :rules="rules.requiredTxt"
                       maxlength="25"
                       counter
                     />
                   </v-col>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-text-field
                       v-model="item.surname_m"
                       label="A. materno*"
@@ -66,10 +66,10 @@
                       counter
                     />
                   </v-col>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-file-input
                       v-model="item.avatar_doc"
-                      label="Fotografía (IMG)*"
+                      label="Fotografía*"
                       dense
                       outlined
                       :rules="rules.imgLmtNR"
@@ -121,7 +121,7 @@
               </v-card-title>
               <v-card-text>
                 <v-row dense>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-text-field
                       v-model="item.email"
                       label="E-mail"
@@ -131,10 +131,10 @@
                       :rules="rules.email"
                       maxlength="65"
                       counter
-                      prepend-icon="mdi-account"
+                      prepend-icon="mdi-at"
                     />
                   </v-col>
-                  <v-col v-if="store_mode" cols="12" sm="12" md="3">
+                  <v-col v-if="store_mode" cols="12" md="3">
                     <InpPassword
                       :model.sync="item.password"
                       label="Contraseña"
@@ -142,7 +142,7 @@
                       counter
                     />
                   </v-col>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-select
                       v-model="item.role_id"
                       label="Rol"
@@ -153,6 +153,44 @@
                       :item-text="(v) => v.name"
                       item-value="id"
                       :loading="roles_ldg"
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <v-card>
+              <v-card-title class="card_title_border">
+                <v-row dense>
+                  <v-col cols="8">
+                    <CardTitle text="CONTACTO" sub />
+                  </v-col>
+                  <v-col cols="4" class="text-right" />
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <v-row dense>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.phone"
+                      label="Teléfono fijo*"
+                      dense
+                      outlined
+                      type="text"
+                      maxlength="10"
+                      counter
+                    />
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.movil_phone"
+                      label="Teléfono móvil*"
+                      dense
+                      outlined
+                      type="text"
+                      maxlength="10"
+                      counter
                     />
                   </v-col>
                 </v-row>
@@ -254,6 +292,8 @@ export default {
           email: null,
           password: null,
           role_id: null,
+          phone: null,
+          movil_phone: null,
         };
 
         this.ldg = false;

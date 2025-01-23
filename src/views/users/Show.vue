@@ -82,16 +82,16 @@
             </v-card-title>
             <v-card-text>
               <v-row dense>
-                <v-col cols="12" sm="12" md="3">
+                <v-col cols="12" md="3">
                   <VisVal :val="item.name" lab="Nombre" />
                 </v-col>
-                <v-col cols="12" sm="12" md="3">
+                <v-col cols="12" md="3">
                   <VisVal :val="item.surname_p" lab="A. paterno" />
                 </v-col>
-                <v-col cols="12" sm="12" md="3">
+                <v-col cols="12" md="3">
                   <VisVal :val="item.surname_m" lab="A. materno" />
                 </v-col>
-                <v-col cols="12" sm="12" md="3">
+                <v-col cols="12" md="3">
                   <VisDoc :val="item.avatar_b64" lab="Fotografía" img />
                 </v-col>
               </v-row>
@@ -110,11 +110,33 @@
             </v-card-title>
             <v-card-text>
               <v-row dense>
-                <v-col cols="12" sm="12" md="3">
+                <v-col cols="12" md="3">
                   <VisVal :val="item.email" lab="E-mail" />
                 </v-col>
-                <v-col cols="12" sm="12" md="3">
+                <v-col cols="12" md="3">
                   <VisVal :val="item.role.name" lab="Rol" />
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col cols="12">
+          <v-card>
+            <v-card-title class="card_title_border">
+              <v-row dense>
+                <v-col cols="8">
+                  <CardTitle text="CONTACTO" sub />
+                </v-col>
+                <v-col cols="4" class="text-right" />
+              </v-row>
+            </v-card-title>
+            <v-card-text>
+              <v-row dense>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.phone" lab="Teléfono fijo" />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.movil_phone" lab="Teléfono móvil" />
                 </v-col>
               </v-row>
             </v-card-text>
