@@ -5,6 +5,29 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 const routes = [
+  //configurations
+  {
+    path: "/configuracion",
+    name: "configurations.show",
+    component: () => import("@/views/configurations/Show.vue"),
+    meta: {
+      title: "Configuración",
+      icon: "mdi-cog",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/configuracion/editar",
+    name: "configurations.update",
+    component: () => import("@/views/configurations/StoreUpdate.vue"),
+    meta: {
+      title: "Configuración | Editar",
+      icon: "mdi-cog",
+      req_auth: true,
+      permission: true,
+    },
+  },
   //users
   {
     path: "/usuarios",

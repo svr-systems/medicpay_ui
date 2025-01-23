@@ -3,7 +3,6 @@
     <v-card-title>
       <v-row dense>
         <v-col cols="8">
-          <BtnBack :route="{ name: route }" />
           <CardTitle :text="$route.meta.title" :icon="$route.meta.icon" />
         </v-col>
         <v-col cols="4" class="text-right">
@@ -54,32 +53,80 @@
               </v-row>
             </v-card-title>
             <v-card-text>
-              <v-row dense>
-                <v-col cols="12" md="3">
-                  <VisVal :val="item.name" lab="Nombre" />
-                </v-col>
-                <v-col cols="12" md="3">
-                  <VisVal :val="item.example_type.name" lab="Tipo" />
-                </v-col>
-              </v-row>
+              <v-row dense> </v-row>
             </v-card-text>
           </v-card>
         </v-col>
         <v-col cols="12">
-          <v-tooltip right>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                fab
-                x-small
-                color="error"
-                @click.prevent="deleteItem"
-              >
-                <v-icon small> mdi-delete </v-icon>
-              </v-btn>
-            </template>
-            Eliminar
-          </v-tooltip>
+          <v-card>
+            <v-card-title class="card_title_border">
+              <v-row dense>
+                <v-col cols="8">
+                  <CardTitle text="FISCAL" sub />
+                </v-col>
+                <v-col cols="4" class="text-right" />
+              </v-row>
+            </v-card-title>
+            <v-card-text>
+              <v-row dense>
+                <v-col cols="12" md="3">
+                  <VisDoc
+                    :val="item.fiscal.constancy_b64"
+                    lab="Const. Situación Fisc."
+                  />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal
+                    :val="item.fiscal.fiscal_type.name"
+                    lab="Tipo Fiscal"
+                  />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.fiscal.name" lab="Nombre | Razón social" />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.fiscal.code" lab="RFC" />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal
+                    :val="
+                      item.fiscal.fiscal_regime.code +
+                      ' | ' +
+                      item.fiscal.fiscal_regime.name
+                    "
+                    lab="Régimen Fiscal"
+                  />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.fiscal.zip" lab="C. P." />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal
+                    :val="item.fiscal.town ? item.fiscal.town.state.name : null"
+                    lab="Estado"
+                  />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal
+                    :val="item.fiscal.town ? item.fiscal.town.name : null"
+                    lab="Municipio"
+                  />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.fiscal.street" lab="Calle" />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.fiscal.exterior" lab="Núm. exterior" />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.fiscal.interior" lab="Núm. interno" />
+                </v-col>
+                <v-col cols="12" md="3">
+                  <VisVal :val="item.fiscal.neighborhood" lab="Colonia" />
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
     </v-card-text>
@@ -93,6 +140,7 @@ import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import CardTitle from "@/components/CardTitle.vue";
 import VisVal from "@/components/VisVal.vue";
+import VisDoc from "@/components/VisDoc.vue";
 import DlgReg from "@/components/DlgReg.vue";
 
 export default {
@@ -100,12 +148,13 @@ export default {
     BtnBack,
     CardTitle,
     VisVal,
+    VisDoc,
     DlgReg,
   },
   data() {
     return {
-      route: "examples",
-      id: this.$route.params.id ? this.$route.params.id : null,
+      route: "configurations",
+      id: 1,
       auth: this.$store.getters.getAuth,
       ldg: true,
       item: null,
@@ -129,29 +178,6 @@ export default {
         })
         .catch((err) => {
           this.$root.$alert("error", getErr(err));
-        });
-    },
-    deleteItem() {
-      this.$root
-        .$confirm("¿Confirma eliminar el registro?")
-        .then((confirmed) => {
-          if (confirmed) {
-            this.ldg = true;
-
-            Axios.delete(
-              URL_API + "/" + this.route + "/" + this.id,
-              getHdrs(this.auth.token)
-            )
-              .then((rsp) => {
-                rsp = getRsp(rsp);
-                this.$root.$alert("warning", rsp.msg);
-                this.$router.push({ name: this.route });
-                this.ldg = false;
-              })
-              .catch((err) => {
-                this.$root.$alert("error", getErr(err));
-              });
-          }
         });
     },
   },

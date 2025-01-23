@@ -29,7 +29,7 @@
               </v-card-title>
               <v-card-text>
                 <v-row dense>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-text-field
                       v-model="item.name"
                       label="Nombre"
@@ -41,7 +41,7 @@
                       counter
                     />
                   </v-col>
-                  <v-col cols="12" sm="12" md="3">
+                  <v-col cols="12" md="3">
                     <v-autocomplete
                       v-model="item.example_type_id"
                       label="Tipo"

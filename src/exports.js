@@ -17,6 +17,12 @@ export const ROUTES = [
     icon: "mdi-account-multiple",
     show: true,
   },
+  {
+    link: "configurations.show",
+    title: "Configuración",
+    icon: "mdi-cog",
+    show: true,
+  },
 ];
 
 export const getHdrs = (token = null, form_data = false) => {
