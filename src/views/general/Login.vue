@@ -8,7 +8,7 @@
             <v-card-title>
               <v-row dense>
                 <v-col cols="12" class="text-right">
-                  <BtnTheme small />
+                  <BtnTheme />
                 </v-col>
               </v-row>
             </v-card-title>
