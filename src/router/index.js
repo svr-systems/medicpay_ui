@@ -5,6 +5,65 @@ import store from "@/store";
 Vue.use(VueRouter);
 
 const routes = [
+  //doctors
+  {
+    path: "/medicos",
+    name: "doctors",
+    component: () => import("@/views/doctors/Index.vue"),
+    meta: {
+      title: "Médicos",
+      icon: "mdi-doctor",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  //doctor_specialty_types
+  {
+    path: "/medicos/especialidades",
+    name: "doctor_specialty_types",
+    component: () => import("@/views/doctor_specialty_types/Index.vue"),
+    meta: {
+      title: "Médicos | Especialidades",
+      icon: "mdi-medication",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/medicos/especialidades/agregar",
+    name: "doctor_specialty_types.store",
+    component: () => import("@/views/doctor_specialty_types/StoreUpdate.vue"),
+    meta: {
+      title: "Médicos | Especialidad | Agregar",
+      icon: "mdi-medication",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/medicos/especialidades/:id",
+    name: "doctor_specialty_types.show",
+    component: () => import("@/views/doctor_specialty_types/Show.vue"),
+    meta: {
+      title: "Médicos | Especialidad",
+      icon: "mdi-medication",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
+  {
+    path: "/medicos/especialidades/:id/editar",
+    name: "doctor_specialty_types.update",
+    component: () => import("@/views/doctor_specialty_types/StoreUpdate.vue"),
+    meta: {
+      title: "Médicos | Especialidad | Editar",
+      icon: "mdi-medication",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
   //hospitals
   {
     path: "/hospitales",

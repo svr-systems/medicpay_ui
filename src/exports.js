@@ -12,6 +12,12 @@ export const ROUTES = [
     show: true,
   },
   {
+    link: "doctors",
+    title: "Médicos",
+    icon: "mdi-doctor",
+    show: true,
+  },
+  {
     link: "hospitals",
     title: "Hospitales",
     icon: "mdi-hospital-building",
