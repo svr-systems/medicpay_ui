@@ -62,7 +62,7 @@
         <v-list-item-content>
           <v-list-item-title>
             <small>
-              {{ version }}
+              {{ app_version }}
             </small>
           </v-list-item-title>
         </v-list-item-content>
@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      version: APP_VERSION,
+      app_version: APP_VERSION,
       auth: this.$store.getters.getAuth,
       routes: ROUTES,
     };

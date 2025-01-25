@@ -49,7 +49,7 @@
                     </div>
                   </v-col>
                   <v-col cols="12" class="mt-1">
-                    <small>{{ version }}</small>
+                    <small>{{ app_version }}</small>
                   </v-col>
                 </v-row>
               </v-form>
@@ -63,7 +63,7 @@
 
 <script>
 import {
-  VERSION,
+  APP_VERSION,
   APP_NAME,
   URL_API,
   getHdrs,
@@ -82,7 +82,7 @@ export default {
   },
   data() {
     return {
-      version: VERSION,
+      app_version: APP_VERSION,
       app_name: APP_NAME,
       rules: getRules(),
       data: {
