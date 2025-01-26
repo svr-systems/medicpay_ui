@@ -1,4 +1,4 @@
-export const APP_VERSION = "v1.25.01.25";
+export const APP_VERSION = "v1.25.01.26";
 export const APP_NAME = "MEDICPAY";
 
 const URL = "http://127.0.0.1:8000";
@@ -9,6 +9,12 @@ export const ROUTES = [
     link: "home",
     title: "Inicio",
     icon: "mdi-home",
+    show: true,
+  },
+  {
+    link: "patients",
+    title: "Pacientes",
+    icon: "mdi-account-injury",
     show: true,
   },
   {
@@ -52,6 +58,7 @@ export const USER_OBJ = {
 };
 
 export const FISCAL_OBJ = {
+  id: null,
   constancy: null,
   constancy_doc: null,
   constancy_dlt: false,
@@ -68,6 +75,7 @@ export const FISCAL_OBJ = {
 };
 
 export const ADDRESS_OBJ = {
+  id: null,
   proof: null,
   proof_doc: null,
   proof_dlt: false,
@@ -80,6 +88,7 @@ export const ADDRESS_OBJ = {
 };
 
 export const BANK_OBJ = {
+  id: null,
   bank_type_id: null,
   account: null,
   clabe: null,
