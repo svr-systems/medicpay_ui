@@ -37,6 +37,60 @@ export const ROUTES = [
   },
 ];
 
+export const USER_OBJ = {
+  id: null,
+  active: null,
+  name: null,
+  surname_p: null,
+  surname_m: null,
+  avatar: null,
+  avatar_doc: null,
+  avatar_dlt: false,
+  email: null,
+  phone: null,
+  movil_phone: null,
+};
+
+export const FISCAL_OBJ = {
+  constancy: null,
+  constancy_doc: null,
+  constancy_dlt: false,
+  fiscal_type_id: null,
+  name: null,
+  code: null,
+  fiscal_regime_id: null,
+  zip: null,
+  town_id: null,
+  street: null,
+  exterior: null,
+  interior: null,
+  neighborhood: null,
+};
+
+export const ADDRESS_OBJ = {
+  proof: null,
+  proof_doc: null,
+  proof_dlt: false,
+  zip: null,
+  town_id: null,
+  street: null,
+  exterior: null,
+  interior: null,
+  neighborhood: null,
+};
+
+export const BANK_OBJ = {
+  bank_type_id: null,
+  account: null,
+  clabe: null,
+  account_proof: null,
+  account_proof_doc: null,
+  account_proof_dlt: false,
+  validation: null,
+  validation_doc: null,
+  validation_dlt: false,
+};
+
 export const getHdrs = (token = null, form_data = false) => {
   let headers = {
     "X-Requested-With": "XMLHttpRequest",
@@ -90,7 +144,7 @@ export const getDateTime = (sprDate = "-", sprBwn = " ", sprTime = ":") => {
 
 export const getRules = () => {
   return {
-    required: [(v) => !!v || v == 0 || "Campo requerido."],
+    required: [(v) => !!v || "Campo requerido."],
     requiredTxt: [
       (v) => !!v || "Campo requerido.",
       (v) => (v && v.trim().length >= 2) || "Mínimo 2 caracteres.",
@@ -177,7 +231,7 @@ export const getObj = (data, store = false) => {
 
 export const getPropDocs = (obj, prop, subprop) => {
   obj[prop].forEach(function (item, i) {
-    obj[subprop + "_" + i] = item[subprop];
+    obj[prop + "_" + subprop + "_" + i] = item[subprop];
   });
 
   return obj;

@@ -140,6 +140,11 @@ export default {
         sortable: false,
       },
       {
+        value: "id",
+        text: "IDH",
+        filterable: true,
+      },
+      {
         value: "name",
         text: "Nombre comercial",
         filterable: true,

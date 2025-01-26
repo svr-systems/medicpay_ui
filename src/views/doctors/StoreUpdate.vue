@@ -31,50 +31,117 @@
                 <v-row dense>
                   <v-col cols="12" md="3">
                     <v-text-field
-                      v-model="item.name"
-                      label="Nombre comercial"
+                      v-model="item.user.name"
+                      label="Nombre"
                       dense
                       outlined
                       type="text"
-                      :rules="rules.required"
-                      maxlength="100"
+                      :rules="rules.requiredTxt"
+                      maxlength="50"
+                      counter
+                    />
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.user.surname_p"
+                      label="A. paterno"
+                      dense
+                      outlined
+                      type="text"
+                      :rules="rules.requiredTxt"
+                      maxlength="25"
+                      counter
+                    />
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.user.surname_m"
+                      label="A. materno*"
+                      dense
+                      outlined
+                      type="text"
+                      maxlength="25"
                       counter
                     />
                   </v-col>
                   <v-col cols="12" md="3">
                     <v-file-input
-                      v-model="item.logo_doc"
-                      label="Logo*"
+                      v-model="item.user.avatar_doc"
+                      label="Fotografía*"
                       dense
                       outlined
                       :rules="rules.imgLmtNR"
                       show-size
                       prepend-icon=""
                       accept=".jpg,.jpeg,.png"
-                      :disabled="item.logo_dlt"
+                      :disabled="item.user.avatar_dlt"
                     >
                       <template v-slot:append>
-                        <div v-if="!store_mode && item.logo && !item.logo_doc">
-                          <BtnDwd :val="item.logo_b64" />
+                        <div
+                          v-if="
+                            !store_mode &&
+                            item.user.avatar &&
+                            !item.user.avatar_doc
+                          "
+                        >
+                          <BtnDwd :val="item.user.avatar_b64" />
                           <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
                               <v-btn
                                 v-on="on"
                                 icon
                                 small
-                                :color="item.logo_dlt ? 'error' : ''"
-                                @click.prevent="item.logo_dlt = !item.logo_dlt"
+                                :color="item.user.avatar_dlt ? 'error' : ''"
+                                @click.prevent="
+                                  item.user.avatar_dlt = !item.user.avatar_dlt
+                                "
                               >
                                 <v-icon small>
-                                  mdi-delete{{ item.logo_dlt ? "-off" : "" }}
+                                  mdi-delete{{
+                                    item.user.avatar_dlt ? "-off" : ""
+                                  }}
                                 </v-icon>
                               </v-btn>
                             </template>
-                            {{ item.logo_dlt ? "NO " : "" }} Eliminar
+                            {{ item.user.avatar_dlt ? "NO " : "" }} Eliminar
                           </v-tooltip>
                         </div>
                       </template>
                     </v-file-input>
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-autocomplete
+                      v-model="item.hospital_id"
+                      label="Hospital"
+                      dense
+                      outlined
+                      :rules="rules.required"
+                      :items="hospitals"
+                      :item-text="(v) => 'IDH ' + v.id + ' | ' + v.name"
+                      item-value="id"
+                      :loading="hospitals_ldg"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.consultation_amount"
+                      label="Monto consulta"
+                      dense
+                      outlined
+                      :rules="rules.required"
+                      type="number"
+                      min="0"
+                      max="999999999"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                      v-model="item.observation"
+                      label="Observación"
+                      dense
+                      outlined
+                      rows="2"
+                    />
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -85,7 +152,7 @@
               <v-card-title class="card_title_border">
                 <v-row dense>
                   <v-col cols="8">
-                    <CardTitle text="PERSONA DE CONTACTO" sub />
+                    <CardTitle text="CUENTA" sub />
                   </v-col>
                   <v-col cols="4" class="text-right" />
                 </v-row>
@@ -94,25 +161,201 @@
                 <v-row dense>
                   <v-col cols="12" md="3">
                     <v-text-field
-                      v-model="item.contact"
-                      label="Nombre*"
+                      v-model="item.user.email"
+                      label="E-mail"
                       dense
                       outlined
                       type="text"
-                      maxlength="100"
+                      :rules="rules.email"
+                      maxlength="65"
                       counter
+                      prepend-icon="mdi-at"
                     />
                   </v-col>
                   <v-col cols="12" md="3">
+                    <v-switch
+                      v-model="item.user.active"
+                      label="Usr. sistema"
+                      color="info"
+                      class="mt-1"
+                      dense
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <v-card>
+              <v-card-title class="card_title_border">
+                <v-row dense>
+                  <v-col cols="8">
+                    <CardTitle text="CONTACTO" sub />
+                  </v-col>
+                  <v-col cols="4" class="text-right" />
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <v-row dense>
+                  <v-col cols="12" md="3">
                     <v-text-field
-                      v-model="item.contact_phone"
-                      label="Teléfono*"
+                      v-model="item.user.phone"
+                      label="Teléfono fijo*"
                       dense
                       outlined
                       type="text"
                       maxlength="10"
                       counter
                     />
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.user.movil_phone"
+                      label="Teléfono móvil*"
+                      dense
+                      outlined
+                      type="text"
+                      maxlength="10"
+                      counter
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <v-card>
+              <v-card-title class="card_title_border">
+                <v-row dense>
+                  <v-col cols="8">
+                    <CardTitle text="ESPECIALIDADES" sub />
+                  </v-col>
+                  <v-col cols="4" class="text-right" />
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    v-for="(doctor_specialty, i) in item.doctor_specialties"
+                    :key="i"
+                    v-if="doctor_specialty.active"
+                  >
+                    <v-row dense>
+                      <v-col cols="12" md="3">
+                        <v-autocomplete
+                          v-model="doctor_specialty.doctor_specialty_type_id"
+                          :label="'Tipo (' + (i + 1) + ')'"
+                          dense
+                          outlined
+                          :rules="rules.required"
+                          :items="doctor_specialty_types"
+                          :item-text="(v) => v.name"
+                          item-value="id"
+                          :loading="doctor_specialty_types_ldg"
+                        />
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-file-input
+                          v-model="doctor_specialty.license_proof_doc"
+                          label="Cédula Digital"
+                          dense
+                          outlined
+                          :rules="
+                            doctor_specialty.id ? rules.docLmtNR : rules.docLmt
+                          "
+                          show-size
+                          prepend-icon=""
+                          accept=".jpg,.jpeg,.png,.pdf"
+                          :disabled="doctor_specialty.license_proof_dlt"
+                        >
+                          <template v-slot:append>
+                            <div
+                              v-if="
+                                !store_mode &&
+                                doctor_specialty.license_proof &&
+                                !doctor_specialty.license_proof_doc
+                              "
+                            >
+                              <BtnDwd
+                                :val="doctor_specialty.license_proof_b64"
+                              />
+                              <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                  <v-btn
+                                    v-on="on"
+                                    icon
+                                    small
+                                    :color="
+                                      doctor_specialty.license_proof_dlt
+                                        ? 'error'
+                                        : ''
+                                    "
+                                    @click.prevent="
+                                      doctor_specialty.license_proof_dlt =
+                                        !doctor_specialty.license_proof_dlt
+                                    "
+                                  >
+                                    <v-icon small>
+                                      mdi-delete{{
+                                        doctor_specialty.license_proof_dlt
+                                          ? "-off"
+                                          : ""
+                                      }}
+                                    </v-icon>
+                                  </v-btn>
+                                </template>
+                                {{
+                                  doctor_specialty.license_proof_dlt
+                                    ? "NO "
+                                    : ""
+                                }}
+                                Eliminar
+                              </v-tooltip>
+                            </div>
+                          </template>
+                        </v-file-input>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-tooltip v-if="i != 0" right>
+                          <template v-slot:activator="{ on }">
+                            <v-btn
+                              v-on="on"
+                              icon
+                              outlined
+                              x-small
+                              color="error"
+                              @click.prevent="dltDoctorSpecialty(i)"
+                            >
+                              <v-icon x-small> mdi-minus </v-icon>
+                            </v-btn>
+                          </template>
+                          Eliminar ({{ i + 1 }})
+                        </v-tooltip>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-divider />
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col cols="12">
+                    <v-tooltip right>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          v-on="on"
+                          icon
+                          outlined
+                          small
+                          color="warning"
+                          @click.prevent="addDoctorSpecialty()"
+                        >
+                          <v-icon small> mdi-plus </v-icon>
+                        </v-btn>
+                      </template>
+                      Agregar
+                    </v-tooltip>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -314,66 +557,89 @@
               <v-card-title class="card_title_border">
                 <v-row dense>
                   <v-col cols="8">
-                    <CardTitle text="DOMICILIO" sub />
+                    <CardTitle text="INFO. BANCARIA" sub />
                   </v-col>
-                  <v-col cols="4" class="text-right">
-                    <v-tooltip left>
-                      <template v-slot:activator="{ on }">
-                        <v-btn
-                          v-on="on"
-                          icon
-                          outlined
-                          x-small
-                          color="info"
-                          @click.prevent="copyFiscalToAddres"
-                        >
-                          <v-icon x-small> mdi-content-copy </v-icon>
-                        </v-btn>
-                      </template>
-                      Copiar información de Fiscal
-                    </v-tooltip>
-                  </v-col>
+                  <v-col cols="4" class="text-right" />
                 </v-row>
               </v-card-title>
               <v-card-text>
                 <v-row dense>
                   <v-col cols="12" md="3">
+                    <v-autocomplete
+                      v-model="item.bank.bank_type_id"
+                      label="Banco*"
+                      dense
+                      outlined
+                      :items="bank_types"
+                      :item-text="(v) => v.name"
+                      item-value="id"
+                      :loading="bank_types_ldg"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.bank.account"
+                      label="Cuenta*"
+                      dense
+                      outlined
+                      type="text"
+                      maxlength="15"
+                      counter
+                    />
+                  </v-col>
+                  <v-col cols="12" md="3">
+                    <v-text-field
+                      v-model="item.bank.clabe"
+                      label="CLABE*"
+                      dense
+                      outlined
+                      type="text"
+                      maxlength="18"
+                      counter
+                    />
+                  </v-col>
+                  <v-col cols="12" md="3">
                     <v-file-input
-                      v-model="item.address.proof_doc"
-                      label="Comp. Domicilio*"
+                      v-model="item.bank.account_proof_doc"
+                      label="Edo. cuenta*"
                       dense
                       outlined
                       :rules="rules.docLmtNR"
                       show-size
                       prepend-icon=""
                       accept=".pdf"
-                      :disabled="item.address.proof_dlt"
+                      :disabled="item.bank.account_proof_dlt"
                     >
                       <template v-slot:append>
                         <div
-                          v-if="item.address.proof && !item.address.proof_doc"
+                          v-if="
+                            item.bank.account_proof &&
+                            !item.bank.account_proof_doc
+                          "
                         >
-                          <BtnDwd :val="item.address.proof_b64" />
+                          <BtnDwd :val="item.bank.account_proof_b64" />
                           <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
                               <v-btn
                                 v-on="on"
                                 icon
                                 small
-                                :color="item.address.proof_dlt ? 'error' : ''"
+                                :color="
+                                  item.bank.account_proof_dlt ? 'error' : ''
+                                "
                                 @click.prevent="
-                                  item.address.proof_dlt =
-                                    !item.address.proof_dlt
+                                  item.bank.account_proof_dlt =
+                                    !item.bank.account_proof_dlt
                                 "
                               >
                                 <v-icon small>
                                   mdi-delete{{
-                                    item.address.proof_dlt ? "-off" : ""
+                                    item.bank.account_proof_dlt ? "-off" : ""
                                   }}
                                 </v-icon>
                               </v-btn>
                             </template>
-                            {{ item.address.proof_dlt ? "NO " : "" }}
+                            {{ item.bank.account_proof_dlt ? "NO " : "" }}
                             Eliminar
                           </v-tooltip>
                         </div>
@@ -381,87 +647,49 @@
                     </v-file-input>
                   </v-col>
                   <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="item.address.zip"
-                      label="C. P."
+                    <v-file-input
+                      v-model="item.bank.validation_doc"
+                      label="Validación*"
                       dense
                       outlined
-                      :rules="rules.requiredTxt"
-                      type="text"
-                      maxlength="5"
-                      counter
-                    />
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-autocomplete
-                      v-model="address_state_id"
-                      label="Estado"
-                      dense
-                      outlined
-                      :rules="rules.required"
-                      :items="states"
-                      :item-text="(v) => v.name"
-                      item-value="id"
-                      :loading="states_ldg"
-                      @change="getAddressTowns()"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-autocomplete
-                      v-model="item.address.town_id"
-                      label="Municipio"
-                      dense
-                      outlined
-                      :rules="rules.required"
-                      :items="address_towns"
-                      :item-text="(v) => v.name"
-                      item-value="id"
-                      :loading="address_towns_ldg"
-                    />
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="item.address.street"
-                      label="Calle*"
-                      dense
-                      outlined
-                      type="text"
-                      maxlength="75"
-                      counter
-                    />
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="item.address.exterior"
-                      label="Núm. exterior*"
-                      dense
-                      outlined
-                      type="text"
-                      maxlength="15"
-                      counter
-                    />
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="item.address.interior"
-                      label="Núm. interno*"
-                      dense
-                      outlined
-                      type="text"
-                      maxlength="15"
-                      counter
-                    />
-                  </v-col>
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="item.address.neighborhood"
-                      label="Colonia*"
-                      dense
-                      outlined
-                      type="text"
-                      maxlength="75"
-                      counter
-                    />
+                      :rules="rules.docLmtNR"
+                      show-size
+                      prepend-icon=""
+                      accept=".pdf"
+                      :disabled="item.bank.validation_dlt"
+                    >
+                      <template v-slot:append>
+                        <div
+                          v-if="
+                            item.bank.validation && !item.bank.validation_doc
+                          "
+                        >
+                          <BtnDwd :val="item.bank.validation_b64" />
+                          <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                              <v-btn
+                                v-on="on"
+                                icon
+                                small
+                                :color="item.bank.validation_dlt ? 'error' : ''"
+                                @click.prevent="
+                                  item.bank.validation_dlt =
+                                    !item.bank.validation_dlt
+                                "
+                              >
+                                <v-icon small>
+                                  mdi-delete{{
+                                    item.bank.validation_dlt ? "-off" : ""
+                                  }}
+                                </v-icon>
+                              </v-btn>
+                            </template>
+                            {{ item.bank.validation_dlt ? "NO " : "" }}
+                            Eliminar
+                          </v-tooltip>
+                        </div>
+                      </template>
+                    </v-file-input>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -500,9 +728,11 @@ import {
   getRules,
   getObj,
   getPropDoc,
+  getPropDocs,
   getFormData,
+  USER_OBJ,
   FISCAL_OBJ,
-  ADDRESS_OBJ,
+  BANK_OBJ,
 } from "@/exports";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
@@ -517,7 +747,7 @@ export default {
   },
   data() {
     return {
-      route: "hospitals",
+      route: "doctors",
       id: this.$route.params.id ? this.$route.params.id : null,
       auth: this.$store.getters.getAuth,
       ldg: true,
@@ -525,6 +755,8 @@ export default {
       item: null,
       rules: getRules(),
       //CATALOGS
+      hospitals: [],
+      hospitals_ldg: false,
       fiscal_types: [],
       fiscal_types_ldg: false,
       fiscal_regimes: [],
@@ -533,19 +765,35 @@ export default {
       states_ldg: true,
       fiscal_towns: [],
       fiscal_towns_ldg: false,
-      address_towns: [],
-      address_towns_ldg: false,
+      bank_types: [],
+      bank_types_ldg: false,
+      doctor_specialty_types: [],
+      doctor_specialty_types_ldg: false,
       //OTHERS
       fiscal_state_id: null,
-      address_state_id: null,
     };
   },
   methods: {
     getCatalogs() {
+      Axios.get(URL_API + "/hospitals", getHdrs(this.auth.token))
+        .then((rsp) => {
+          rsp = getRsp(rsp);
+          this.hospitals = rsp.data.items;
+          this.hospitals_ldg = false;
+        })
+        .catch((err) => {
+          this.$root.$alert("error", getErr(err));
+          this.hospitals_ldg = false;
+        });
+
       Axios.get(URL_API + "/fiscal_types", getHdrs(this.auth.token))
         .then((rsp) => {
           rsp = getRsp(rsp);
           this.fiscal_types = rsp.data.items;
+          this.fiscal_types.push({
+            id: null,
+            name: "-",
+          });
           this.fiscal_types_ldg = false;
         })
         .catch((err) => {
@@ -559,13 +807,39 @@ export default {
           this.states = rsp.data.items;
           this.states.push({
             id: null,
-            name: "*NINGUNO",
+            name: "-",
           });
           this.states_ldg = false;
         })
         .catch((err) => {
           this.$root.$alert("error", getErr(err));
           this.states_ldg = false;
+        });
+
+      Axios.get(URL_API + "/bank_types", getHdrs(this.auth.token))
+        .then((rsp) => {
+          rsp = getRsp(rsp);
+          this.bank_types = rsp.data.items;
+          this.bank_types.push({
+            id: null,
+            name: "-",
+          });
+          this.bank_types_ldg = false;
+        })
+        .catch((err) => {
+          this.$root.$alert("error", getErr(err));
+          this.bank_types_ldg = false;
+        });
+
+      Axios.get(URL_API + "/doctor_specialty_types", getHdrs(this.auth.token))
+        .then((rsp) => {
+          rsp = getRsp(rsp);
+          this.doctor_specialty_types = rsp.data.items;
+          this.doctor_specialty_types_ldg = false;
+        })
+        .catch((err) => {
+          this.$root.$alert("error", getErr(err));
+          this.doctor_specialty_types_ldg = false;
         });
     },
     getItem() {
@@ -574,17 +848,19 @@ export default {
       if (this.store_mode) {
         this.item = {
           id: null,
-          name: null,
-          logo: null,
-          logo_doc: null,
-          logo_dlt: false,
-          contact: null,
-          contact_phone: null,
+          user_id: null,
+          hospital_id: null,
+          consultation_amount: "0",
+          observation: null,
           fiscal_id: null,
-          address_id: null,
+          bank_id: null,
+          user: USER_OBJ,
           fiscal: FISCAL_OBJ,
-          address: ADDRESS_OBJ,
+          bank: BANK_OBJ,
+          doctor_specialties: [],
         };
+
+        this.addDoctorSpecialty();
 
         this.ldg = false;
       } else {
@@ -605,9 +881,6 @@ export default {
               this.getFiscalTowns(true);
             }
 
-            this.address_state_id = this.item.address.town.state_id;
-            this.getAddressTowns(true);
-
             this.ldg = false;
           })
           .catch((err) => {
@@ -627,8 +900,11 @@ export default {
             if (confirmed) {
               this.ldg = true;
               let obj = getObj(this.item, this.store_mode);
+              obj = getPropDoc(obj, "user", "avatar_doc");
               obj = getPropDoc(obj, "fiscal", "constancy_doc");
-              obj = getPropDoc(obj, "address", "proof_doc");
+              obj = getPropDoc(obj, "bank", "account_proof_doc");
+              obj = getPropDoc(obj, "bank", "validation_doc");
+              obj = getPropDocs(obj, "doctor_specialties", "license_proof_doc");
 
               Axios.post(
                 URL_API +
@@ -677,6 +953,11 @@ export default {
         .then((rsp) => {
           rsp = getRsp(rsp);
           this.fiscal_regimes = rsp.data.items;
+          this.fiscal_regimes.push({
+            id: null,
+            name: "-",
+            code: "-",
+          });
           this.fiscal_regimes_ldg = false;
         })
         .catch((err) => {
@@ -706,41 +987,24 @@ export default {
           this.fiscal_towns_ldg = false;
         });
     },
-    getAddressTowns(isMounted = false) {
-      if (!isMounted) {
-        this.item.address.town_id = null;
-      }
-
-      this.address_towns = [];
-      this.address_towns_ldg = true;
-
-      Axios.get(
-        URL_API + "/towns?state_id=" + this.address_state_id,
-        getHdrs(this.auth.token)
-      )
-        .then((rsp) => {
-          rsp = getRsp(rsp);
-          this.address_towns = rsp.data.items;
-          this.address_towns_ldg = false;
-        })
-        .catch((err) => {
-          this.$root.$alert("error", getErr(err));
-          this.address_towns_ldg = false;
-        });
+    addDoctorSpecialty() {
+      this.item.doctor_specialties.push({
+        id: null,
+        active: true,
+        doctor_specialty_type_id: null,
+        license_proof: null,
+        license_proof_doc: null,
+        license_proof_dlt: false,
+      });
     },
-    copyFiscalToAddres() {
+    dltDoctorSpecialty(i) {
       this.$root
-        .$confirm("¿Copiar información de Fiscal?")
+        .$confirm("¿Confirma eliminar especialidad (" + (i + 1) + ")?")
         .then((confirmed) => {
           if (confirmed) {
-            this.item.address.zip = this.item.fiscal.zip;
-            this.address_state_id = this.fiscal_state_id;
-            this.item.address.town_id = this.item.fiscal.town_id;
-            this.getAddressTowns(true);
-            this.item.address.street = this.item.fiscal.street;
-            this.item.address.exterior = this.item.fiscal.exterior;
-            this.item.address.interior = this.item.fiscal.interior;
-            this.item.address.neighborhood = this.item.fiscal.neighborhood;
+            this.item.doctor_specialties[i].id == null
+              ? this.item.doctor_specialties.splice(i, 1)
+              : (this.item.doctor_specialties[i].active = 0);
           }
         });
     },

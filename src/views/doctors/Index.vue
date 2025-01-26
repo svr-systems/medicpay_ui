@@ -14,6 +14,7 @@
                 x-small
                 color="pink"
                 dark
+                class="mr-1"
                 :to="{
                   name: 'doctor_specialty_types',
                 }"
@@ -23,7 +24,7 @@
             </template>
             Especialidades
           </v-tooltip>
-          <!-- <v-tooltip bottom>
+          <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn
                 v-on="on"
@@ -38,7 +39,7 @@
               </v-btn>
             </template>
             Agregar
-          </v-tooltip> -->
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-card-title>
@@ -72,6 +73,12 @@
             <template v-slot:item.key="{ item }">
               <b v-text="item.key + 1" />
             </template>
+            <template v-slot:item.user.active="{ item }">
+              <VisVal :val="item.user.active" bool />
+            </template>
+            <template v-slot:item.doctor_specialties_txt="{ item }">
+              <VisVal :val="item.doctor_specialties_txt" />
+            </template>
             <template v-slot:item.action="{ item }">
               <div class="text-right">
                 <v-tooltip v-if="true" left>
@@ -104,10 +111,12 @@
 import { URL_API, getHdrs, getRsp, getErr } from "@/exports";
 import Axios from "axios";
 import CardTitle from "@/components/CardTitle.vue";
+import VisVal from "@/components/VisVal.vue";
 
 export default {
   components: {
     CardTitle,
+    VisVal,
   },
   data() {
     return {
@@ -145,8 +154,58 @@ export default {
         width: "60",
       },
       {
+        value: "id",
+        text: "IDM",
+        filterable: true,
+      },
+      {
         value: "user.full_name",
         text: "Nombre",
+        filterable: true,
+      },
+      {
+        value: "hospital_id",
+        text: "IDH",
+        filterable: true,
+      },
+      {
+        value: "hospital.name",
+        text: "Hospital",
+        filterable: true,
+      },
+      {
+        value: "hospital.address.town.state.name",
+        text: "Estado",
+        filterable: true,
+      },
+      {
+        value: "hospital.address.town.name",
+        text: "Municipio",
+        filterable: true,
+      },
+      {
+        value: "user.email",
+        text: "E-mail",
+        filterable: true,
+      },
+      {
+        value: "user.active",
+        text: "Usr. sistema",
+        filterable: true,
+      },
+      {
+        value: "doctor_specialties_txt",
+        text: "Especialidad",
+        filterable: true,
+      },
+      {
+        value: "fiscal.code",
+        text: "RFC",
+        filterable: true,
+      },
+      {
+        value: "bank.bank_type_id,name",
+        text: "Banco",
         filterable: true,
       },
       {
@@ -158,7 +217,7 @@ export default {
       },
     ];
 
-    // this.getItems();
+    this.getItems();
   },
 };
 </script>

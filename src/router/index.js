@@ -17,6 +17,41 @@ const routes = [
       permission: true,
     },
   },
+  {
+    path: "/medicos/agregar",
+    name: "doctors.store",
+    component: () => import("@/views/doctors/StoreUpdate.vue"),
+    meta: {
+      title: "Médico | Agregar",
+      icon: "mdi-doctor",
+      req_auth: true,
+      permission: true,
+    },
+  },
+  {
+    path: "/medicos/:id",
+    name: "doctors.show",
+    component: () => import("@/views/doctors/Show.vue"),
+    meta: {
+      title: "Médico",
+      icon: "mdi-doctor",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
+  {
+    path: "/medicos/:id/editar",
+    name: "doctors.update",
+    component: () => import("@/views/doctors/StoreUpdate.vue"),
+    meta: {
+      title: "Médico | Editar",
+      icon: "mdi-doctor",
+      req_auth: true,
+      permission: true,
+    },
+    props: true,
+  },
   //doctor_specialty_types
   {
     path: "/medicos/especialidades",
