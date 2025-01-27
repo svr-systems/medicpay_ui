@@ -1,64 +1,70 @@
 <template>
-  <v-card flat>
-    <v-card-title />
-    <v-card-text>
-      <v-row dense justify="center">
-        <v-col cols="12" xs="10" md="3">
-          <v-card elevation="24" :disabled="ldg" :loading="ldg">
-            <v-card-title>
-              <v-row dense>
-                <v-col cols="12" class="text-right">
-                  <BtnTheme />
+  <v-container>
+    <v-row dense justify="center">
+      <v-col cols="12" md="4">
+        <v-card elevation="24" :disabled="ldg" :loading="ldg">
+          <v-card-title>
+            <v-row dense>
+              <v-col cols="12" class="text-right">
+                <BtnTheme />
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-form v-on:submit.prevent ref="data_form" lazy-validation>
+              <v-row class="mt-1 text-center">
+                <v-col cols="12">
+                  <img height="55" :src="require('@/assets/logo.png')" />
+                </v-col>
+                <v-col cols="12">
+                  <span class="overline">{{ app_name }}</span>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="data.email"
+                    label="E-mail"
+                    dense
+                    outlined
+                    type="text"
+                    :rules="rules.email"
+                    maxlength="50"
+                    prepend-icon="mdi-at"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <InpPassword
+                    :model.sync="data.password"
+                    label="Contraseña"
+                    :rules="rules.required"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <div class="text-right">
+                    <v-btn block small color="warning" @click.prevent="login">
+                      Iniciar sesión
+                      <v-icon right small> mdi-login</v-icon>
+                    </v-btn>
+                  </div>
+                </v-col>
+                <v-col cols="12">
+                  <v-btn
+                    outlined
+                    x-small
+                    :to="{ name: 'doctors.store_public' }"
+                  >
+                    Registrarme como médico
+                  </v-btn>
+                </v-col>
+                <v-col cols="12" class="mt-1">
+                  <small>{{ app_version }}</small>
                 </v-col>
               </v-row>
-            </v-card-title>
-            <v-card-text>
-              <v-form v-on:submit.prevent ref="data_form" lazy-validation>
-                <v-row class="mt-1 text-center">
-                  <v-col cols="12">
-                    <img height="55" :src="require('@/assets/logo.png')" />
-                  </v-col>
-                  <v-col cols="12">
-                    <span class="overline">{{ app_name }}</span>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="data.email"
-                      label="E-mail"
-                      dense
-                      outlined
-                      type="text"
-                      :rules="rules.email"
-                      maxlength="50"
-                      prepend-icon="mdi-account"
-                    />
-                  </v-col>
-                  <v-col cols="12">
-                    <InpPassword
-                      :model.sync="data.password"
-                      label="Contraseña"
-                      :rules="rules.required"
-                    />
-                  </v-col>
-                  <v-col cols="12">
-                    <div class="text-right">
-                      <v-btn block small color="warning" @click.prevent="login">
-                        Iniciar sesión
-                        <v-icon right small> mdi-login</v-icon>
-                      </v-btn>
-                    </div>
-                  </v-col>
-                  <v-col cols="12" class="mt-1">
-                    <small>{{ app_version }}</small>
-                  </v-col>
-                </v-row>
-              </v-form>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-card-text>
-  </v-card>
+            </v-form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
