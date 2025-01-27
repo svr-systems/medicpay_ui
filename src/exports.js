@@ -1,105 +1,73 @@
-export const APP_VERSION = "v1.25.01.26";
+export const APP_VERSION = "Versión 1.01.27";
 export const APP_NAME = "MEDICPAY";
 
 const URL = "http://127.0.0.1:8000";
 export const URL_API = URL + "/api";
 
-export const ROUTES = [
-  {
-    link: "home",
-    title: "Inicio",
-    icon: "mdi-home",
-    show: true,
-  },
-  {
-    link: "patients",
-    title: "Pacientes",
-    icon: "mdi-account-injury",
-    show: true,
-  },
-  {
-    link: "doctors",
-    title: "Médicos",
-    icon: "mdi-doctor",
-    show: true,
-  },
-  {
-    link: "hospitals",
-    title: "Hospitales",
-    icon: "mdi-hospital-building",
-    show: true,
-  },
-  {
-    link: "users",
-    title: "Usuarios",
-    icon: "mdi-account-multiple",
-    show: true,
-  },
-  {
-    link: "configurations.show",
-    title: "Configuración",
-    icon: "mdi-cog",
-    show: true,
-  },
-];
-
-export const USER_OBJ = {
-  id: null,
-  active: null,
-  name: null,
-  surname_p: null,
-  surname_m: null,
-  avatar: null,
-  avatar_doc: null,
-  avatar_dlt: false,
-  email: null,
-  phone: null,
-  movil_phone: null,
+export const getUserObj = () => {
+  return {
+    id: null,
+    active: null,
+    name: null,
+    surname_p: null,
+    surname_m: null,
+    avatar: null,
+    avatar_doc: null,
+    avatar_dlt: false,
+    email: null,
+    phone: null,
+    movil_phone: null,
+  };
 };
 
-export const FISCAL_OBJ = {
-  id: null,
-  constancy: null,
-  constancy_doc: null,
-  constancy_dlt: false,
-  fiscal_type_id: null,
-  name: null,
-  code: null,
-  fiscal_regime_id: null,
-  zip: null,
-  town_id: null,
-  street: null,
-  exterior: null,
-  interior: null,
-  neighborhood: null,
+export const getFiscalObj = () => {
+  return {
+    id: null,
+    constancy: null,
+    constancy_doc: null,
+    constancy_dlt: false,
+    fiscal_type_id: null,
+    name: null,
+    code: null,
+    fiscal_regime_id: null,
+    zip: null,
+    town_id: null,
+    street: null,
+    exterior: null,
+    interior: null,
+    neighborhood: null,
+  };
 };
 
-export const ADDRESS_OBJ = {
-  id: null,
-  proof: null,
-  proof_doc: null,
-  proof_dlt: false,
-  zip: null,
-  town_id: null,
-  street: null,
-  exterior: null,
-  interior: null,
-  neighborhood: null,
+export const getAddressObj = () => {
+  return {
+    id: null,
+    proof: null,
+    proof_doc: null,
+    proof_dlt: false,
+    zip: null,
+    town_id: null,
+    street: null,
+    exterior: null,
+    interior: null,
+    neighborhood: null,
+  };
 };
 
-export const BANK_OBJ = {
-  id: null,
-  bank_type_id: null,
-  account: null,
-  clabe: null,
-  account_proof: null,
-  account_proof_doc: null,
-  account_proof_dlt: false,
-  validation: null,
-  validation_doc: null,
-  validation_dlt: false,
+export const getBankObj = () => {
+  return {
+    id: null,
+    bank_type_id: null,
+    account: null,
+    clabe: null,
+    account_proof: null,
+    account_proof_doc: null,
+    account_proof_dlt: false,
+    validation: null,
+    validation_doc: null,
+    validation_dlt: false,
+  };
 };
-
 export const getHdrs = (token = null, form_data = false) => {
   let headers = {
     "X-Requested-With": "XMLHttpRequest",
@@ -286,5 +254,12 @@ export const getBlob = (b64, ext) => {
 
   return new Blob([bytes.buffer], {
     type: "application/" + ext,
+  });
+};
+
+export const getAmountFormat = (v) => {
+  return Number(parseFloat(v).toFixed(2)).toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
   });
 };

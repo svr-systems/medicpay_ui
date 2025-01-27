@@ -501,8 +501,8 @@ import {
   getObj,
   getPropDoc,
   getFormData,
-  FISCAL_OBJ,
-  ADDRESS_OBJ,
+  getFiscalObj,
+  getAddressObj,
 } from "@/exports";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
@@ -582,8 +582,8 @@ export default {
           contact_phone: null,
           fiscal_id: null,
           address_id: null,
-          fiscal: FISCAL_OBJ,
-          address: ADDRESS_OBJ,
+          fiscal: getFiscalObj(),
+          address: getAddressObj(),
         };
 
         this.ldg = false;

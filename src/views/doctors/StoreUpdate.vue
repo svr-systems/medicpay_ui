@@ -730,9 +730,9 @@ import {
   getPropDoc,
   getPropDocs,
   getFormData,
-  USER_OBJ,
-  FISCAL_OBJ,
-  BANK_OBJ,
+  getUserObj,
+  getFiscalObj,
+  getBankObj,
 } from "@/exports";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
@@ -854,9 +854,9 @@ export default {
           observation: null,
           fiscal_id: null,
           bank_id: null,
-          user: USER_OBJ,
-          fiscal: FISCAL_OBJ,
-          bank: BANK_OBJ,
+          user: getUserObj(),
+          fiscal: getFiscalObj(),
+          bank: getBankObj(),
           doctor_specialties: [],
         };
 

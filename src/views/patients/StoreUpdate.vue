@@ -423,8 +423,8 @@ import {
   getObj,
   getPropDoc,
   getFormData,
-  USER_OBJ,
-  FISCAL_OBJ,
+  getUserObj,
+  getFiscalObj,
 } from "@/exports";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
@@ -500,8 +500,8 @@ export default {
           user_id: null,
           observation: null,
           fiscal_id: null,
-          user: USER_OBJ,
-          fiscal: FISCAL_OBJ,
+          user: getUserObj(),
+          fiscal: getFiscalObj(),
         };
 
         this.ldg = false;
