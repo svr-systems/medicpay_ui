@@ -1,8 +1,40 @@
 import auth from "./middleware/auth";
 import login from "./middleware/login";
-import user from "./middleware/user";
+import users from "./middleware/users";
+import doctor from "./middleware/doctor";
 
 const routes = [
+  //public
+  {
+    path: "/registro_medico",
+    name: "doctors.store_public",
+    component: () => import("@/views/doctors/StorePublic.vue"),
+    meta: {
+      title: "Médico",
+      icon: "mdi-doctor",
+    },
+  },
+  //doctor_consultations
+  {
+    path: "/medico/consultas",
+    name: "doctor_consultations",
+    component: () => import("@/views/doctor_consultations/Index.vue"),
+    meta: {
+      title: "Consultas",
+      icon: "mdi-medical-bag",
+      middleware: doctor,
+    },
+  },
+  {
+    path: "/medico/consultas/agregar",
+    name: "doctor_consultations.store",
+    component: () => import("@/views/doctor_consultations/Store.vue"),
+    meta: {
+      title: "Consultas | Agregar",
+      icon: "mdi-medical-bag",
+      middleware: doctor,
+    },
+  },
   //patients
   {
     path: "/pacientes",
@@ -11,7 +43,7 @@ const routes = [
     meta: {
       title: "Pacientes",
       icon: "mdi-account-injury",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -21,7 +53,7 @@ const routes = [
     meta: {
       title: "Paciente | Agregar",
       icon: "mdi-account-injury",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -31,7 +63,7 @@ const routes = [
     meta: {
       title: "Paciente",
       icon: "mdi-account-injury",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -42,7 +74,7 @@ const routes = [
     meta: {
       title: "Paciente | Editar",
       icon: "mdi-account-injury",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -54,7 +86,7 @@ const routes = [
     meta: {
       title: "Médicos",
       icon: "mdi-doctor",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -64,7 +96,7 @@ const routes = [
     meta: {
       title: "Médico | Agregar",
       icon: "mdi-doctor",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -74,7 +106,7 @@ const routes = [
     meta: {
       title: "Médico",
       icon: "mdi-doctor",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -85,7 +117,7 @@ const routes = [
     meta: {
       title: "Médico | Editar",
       icon: "mdi-doctor",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -97,7 +129,7 @@ const routes = [
     meta: {
       title: "Médicos | Especialidades",
       icon: "mdi-medication",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -107,7 +139,7 @@ const routes = [
     meta: {
       title: "Médicos | Especialidad | Agregar",
       icon: "mdi-medication",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -117,7 +149,7 @@ const routes = [
     meta: {
       title: "Médicos | Especialidad",
       icon: "mdi-medication",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -128,7 +160,7 @@ const routes = [
     meta: {
       title: "Médicos | Especialidad | Editar",
       icon: "mdi-medication",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -140,7 +172,7 @@ const routes = [
     meta: {
       title: "Hospitales",
       icon: "mdi-hospital-building",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -150,7 +182,7 @@ const routes = [
     meta: {
       title: "Hospital | Agregar",
       icon: "mdi-hospital-building",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -160,7 +192,7 @@ const routes = [
     meta: {
       title: "Hospital",
       icon: "mdi-hospital-building",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -171,7 +203,7 @@ const routes = [
     meta: {
       title: "Hospital | Editar",
       icon: "mdi-hospital-building",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -183,7 +215,7 @@ const routes = [
     meta: {
       title: "Configuración",
       icon: "mdi-cog",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -193,7 +225,7 @@ const routes = [
     meta: {
       title: "Configuración | Editar",
       icon: "mdi-cog",
-      middleware: user,
+      middleware: users,
     },
   },
   //users
@@ -204,7 +236,7 @@ const routes = [
     meta: {
       title: "Usuarios",
       icon: "mdi-account-multiple",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -214,7 +246,7 @@ const routes = [
     meta: {
       title: "Usuario | Agregar",
       icon: "mdi-account",
-      middleware: user,
+      middleware: users,
     },
   },
   {
@@ -224,7 +256,7 @@ const routes = [
     meta: {
       title: "Usuario",
       icon: "mdi-account",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -235,7 +267,7 @@ const routes = [
     meta: {
       title: "Usuario | Editar",
       icon: "mdi-account",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -246,7 +278,7 @@ const routes = [
     meta: {
       title: "Mi perfil",
       icon: "mdi-card-account-details",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },
@@ -257,7 +289,7 @@ const routes = [
     meta: {
       title: "Mi perfil | Editar",
       icon: "mdi-card-account-details",
-      middleware: user,
+      middleware: users,
     },
     props: true,
   },

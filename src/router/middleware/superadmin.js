@@ -1,8 +1,8 @@
 import store from "@/store";
 
-export default function user(next = null) {
+export default function superadmin(next = null) {
   let auth = store.getters.getAuth;
-  const condition = auth && auth.user.role_id == 3 ? true : false;
+  const condition = auth && auth.user.role_id == 1 ? true : false;
 
   if (!next) {
     return condition;

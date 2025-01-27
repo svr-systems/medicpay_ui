@@ -1,5 +1,11 @@
 import store from "@/store";
 
-export default function login(next) {
-  return store.state.auth ? next({ name: "home" }) : next();
+export default function login(next = null) {
+  const condition = store.state.auth ? true : false;
+
+  if (!next) {
+    return condition;
+  }
+
+  return condition ? next({ name: "home" }) : next();
 }
