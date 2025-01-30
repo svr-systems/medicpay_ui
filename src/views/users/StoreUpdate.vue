@@ -155,6 +155,19 @@
                       :loading="roles_ldg"
                     />
                   </v-col>
+                  <v-col v-if="item.role_id == 6" cols="12" md="3">
+                    <v-autocomplete
+                      v-model="item.module.hospital_id"
+                      label="Hospital"
+                      dense
+                      outlined
+                      :rules="rules.required"
+                      :items="hospitals"
+                      :item-text="(v) => 'IDH ' + v.id + ' | ' + v.name"
+                      item-value="id"
+                      :loading="hospitals_ldg"
+                    />
+                  </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
@@ -230,6 +243,7 @@ import {
   getRules,
   getObj,
   getFormData,
+  getModuleObj,
 } from "@/exports";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
@@ -260,6 +274,8 @@ export default {
       //CATALOGS
       roles: [],
       roles_ldg: true,
+      hospitals: [],
+      hospitals_ldg: true,
       //OTHERS
       profile_mode: true,
     };
@@ -275,6 +291,16 @@ export default {
         .catch((err) => {
           this.$root.$alert("error", getErr(err));
           this.roles_ldg = false;
+        });
+      Axios.get(URL_API + "/hospitals", getHdrs(this.auth.token))
+        .then((rsp) => {
+          rsp = getRsp(rsp);
+          this.hospitals = rsp.data.items;
+          this.hospitals_ldg = false;
+        })
+        .catch((err) => {
+          this.$root.$alert("error", getErr(err));
+          this.hospitals_ldg = false;
         });
     },
     getItem() {
@@ -294,6 +320,7 @@ export default {
           role_id: null,
           phone: null,
           movil_phone: null,
+          module: getModuleObj(),
         };
 
         this.ldg = false;

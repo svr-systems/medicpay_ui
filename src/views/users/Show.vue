@@ -116,6 +116,17 @@
                 <v-col cols="12" md="3">
                   <VisVal :val="item.role.name" lab="Rol" />
                 </v-col>
+                <v-col v-if="item.role_id == 6" cols="12" md="3">
+                  <VisVal
+                    :val="
+                      'IDH ' +
+                      item.module.hospital_id +
+                      ' | ' +
+                      item.module.hospital.name
+                    "
+                    lab="Hospital"
+                  />
+                </v-col>
               </v-row>
             </v-card-text>
           </v-card>

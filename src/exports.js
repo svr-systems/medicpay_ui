@@ -1,4 +1,4 @@
-export const APP_VERSION = "Versión 1.01.27";
+export const APP_VERSION = "Versión 1.01.29";
 export const APP_NAME = "MEDICPAY";
 
 const URL = "http://127.0.0.1:8000";
@@ -68,6 +68,15 @@ export const getBankObj = () => {
     validation_dlt: false,
   };
 };
+
+export const getModuleObj = () => {
+  return {
+    id: null,
+    active: true,
+    hospital: null,
+  };
+};
+
 export const getHdrs = (token = null, form_data = false) => {
   let headers = {
     "X-Requested-With": "XMLHttpRequest",
