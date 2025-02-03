@@ -65,9 +65,10 @@
                         <v-col cols="12" md="6">
                           <v-text-field
                             v-model="item.user.movil_phone"
-                            label="Teléfono móvil*"
+                            label="Teléfono móvil"
                             dense
                             outlined
+                            :rules="rules.required"
                             type="text"
                             maxlength="10"
                             counter
@@ -136,18 +137,16 @@ import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import BtnTheme from "@/components/BtnTheme.vue";
 import CardTitle from "@/components/CardTitle.vue";
-import InpPassword from "@/components/InpPassword.vue";
 
 export default {
   components: {
     BtnBack,
     BtnTheme,
     CardTitle,
-    InpPassword,
   },
   data() {
     return {
-      route: "doctor_consultations",
+      route: "doctor/consultations",
       auth: this.$store.getters.getAuth,
       ldg: false,
       item: null,

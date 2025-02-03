@@ -2,6 +2,7 @@ import auth from "./middleware/auth";
 import login from "./middleware/login";
 import users from "./middleware/users";
 import doctor from "./middleware/doctor";
+import module from "./middleware/module";
 
 const routes = [
   //public
@@ -14,11 +15,44 @@ const routes = [
       icon: "mdi-doctor",
     },
   },
-  //doctor_consultations
+  //module
+  {
+    path: "/modulo/consultas",
+    name: "module/consultations",
+    component: () => import("@/views/module/Consultations.vue"),
+    meta: {
+      title: "Consultas",
+      icon: "mdi-medical-bag",
+      middleware: module,
+    },
+  },
+  {
+    path: "/modulo/consultas/:id/cobrar",
+    name: "module/consultations.charge",
+    component: () => import("@/views/module/ConsultationsCharge.vue"),
+    meta: {
+      title: "Consulta | Cobrar",
+      icon: "mdi-medical-bag",
+      middleware: module,
+    },
+    props: true,
+  },
+  {
+    path: "/modulo/consultas/:id/recibo_pago",
+    name: "module/consultations.payment_proof",
+    component: () => import("@/views/module/ConsultationsPaymentProof.vue"),
+    meta: {
+      title: "Consulta | Recibo de pago",
+      icon: "mdi-medical-bag",
+      middleware: module,
+    },
+    props: true,
+  },
+  //doctor
   {
     path: "/medico/consultas",
-    name: "doctor_consultations",
-    component: () => import("@/views/doctor_consultations/Index.vue"),
+    name: "doctor/consultations",
+    component: () => import("@/views/doctor/Consultations.vue"),
     meta: {
       title: "Consultas",
       icon: "mdi-medical-bag",
@@ -27,10 +61,10 @@ const routes = [
   },
   {
     path: "/medico/consultas/agregar",
-    name: "doctor_consultations.store",
-    component: () => import("@/views/doctor_consultations/Store.vue"),
+    name: "doctor/consultations.store",
+    component: () => import("@/views/doctor/ConsultationsStore.vue"),
     meta: {
-      title: "Consultas | Agregar",
+      title: "Consulta | Agregar",
       icon: "mdi-medical-bag",
       middleware: doctor,
     },

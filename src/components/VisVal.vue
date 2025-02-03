@@ -22,7 +22,11 @@
         mdi-checkbox-blank-circle{{ value ? "" : "-outline" }}
       </v-icon>
     </div>
-    <div v-if="sub_prop" class="text-caption" v-text="sub" />
+    <div v-if="sub_prop" class="text-caption">
+      <small>
+        {{ sub }}
+      </small>
+    </div>
   </div>
 </template>
 

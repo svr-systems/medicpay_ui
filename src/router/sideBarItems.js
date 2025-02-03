@@ -3,6 +3,7 @@ import superadmin from "./middleware/superadmin";
 import admin from "./middleware/admin";
 import user from "./middleware/user";
 import doctor from "./middleware/doctor";
+import module from "./middleware/module";
 
 export const getSideBarItems = () => {
   const side_bar_items = [
@@ -15,7 +16,13 @@ export const getSideBarItems = () => {
           show: auth(),
         },
         {
-          link: "doctor_consultations",
+          link: "module/consultations",
+          title: "Consultas",
+          icon: "mdi-medical-bag",
+          show: module(),
+        },
+        {
+          link: "doctor/consultations",
           title: "Consultas",
           icon: "mdi-medical-bag",
           show: doctor(),

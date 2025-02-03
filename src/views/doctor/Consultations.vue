@@ -59,9 +59,7 @@
               {{ getAmountFormat(item.consultation_amount) }}
             </template>
             <template v-slot:item.action="{ item }">
-              <div class="text-right">
-                
-              </div>
+              <div class="text-right"></div>
             </template>
           </v-data-table>
         </v-col>
@@ -81,7 +79,7 @@ export default {
   },
   data() {
     return {
-      route: "doctor_consultations",
+      route: "doctor/consultations",
       auth: this.$store.getters.getAuth,
       ldg: false,
       items: [],
@@ -130,6 +128,11 @@ export default {
       {
         value: "consultation_amount",
         text: "Monto",
+        filterable: true,
+      },
+      {
+        value: "status",
+        text: "Estado",
         filterable: true,
       },
       {
