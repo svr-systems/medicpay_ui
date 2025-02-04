@@ -131,11 +131,11 @@
                         <v-col cols="12" md="5">
                           <VisVal
                             lab="¿Requiere factura fiscal?"
-                            :val="item.bill"
+                            :val="item.from_fiscal"
                             bool
                           />
                         </v-col>
-                        <v-col cols="12" v-if="item.bill">
+                        <v-col cols="12" v-if="item.from_fiscal">
                           <v-row dense>
                             <v-col cols="12" md="6">
                               <VisVal

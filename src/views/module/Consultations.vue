@@ -47,7 +47,7 @@
               </v-col>
               <v-col class="shrink">
                 <v-btn
-                  v-if="rsp.charged"
+                  v-if="rsp.charge"
                   x-small
                   color="pink"
                   dark
@@ -96,7 +96,7 @@
                   </template>
                   Cobrar
                 </v-tooltip>
-                <v-tooltip v-if="item.amount && !item.payment_receipt" left>
+                <v-tooltip v-if="item.amount && !item.payment_proof" left>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       v-on="on"
@@ -113,6 +113,14 @@
                     </v-btn>
                   </template>
                   Cargar recibo de pago
+                </v-tooltip>
+                <v-tooltip v-if="item.amount && item.payment_proof" left>
+                  <template v-slot:activator="{ on }">
+                    <v-btn v-on="on" icon small>
+                      <v-icon small> mdi-file-eye </v-icon>
+                    </v-btn>
+                  </template>
+                  Ver detalle
                 </v-tooltip>
               </div>
             </template>
@@ -145,7 +153,7 @@ export default {
       filters: [
         {
           id: 1,
-          name: "PENDIENTES",
+          name: "PENDIENTES (TODAS)",
         },
         {
           id: 2,
@@ -154,6 +162,10 @@ export default {
         {
           id: 3,
           name: "PENDIENTES DE RECIBO DE PAGO",
+        },
+        {
+          id: 4,
+          name: "TERMINADAS",
         },
       ],
       //OTHERS
@@ -227,7 +239,7 @@ export default {
       this.rsp = {
         id: this.$route.params.id,
         msg: this.$route.params.msg,
-        charged: this.$route.params.charged,
+        charge: this.$route.params.charge,
       };
     }
 

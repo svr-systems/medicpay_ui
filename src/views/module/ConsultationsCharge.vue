@@ -160,14 +160,14 @@
                         </v-col>
                         <v-col cols="12" md="5">
                           <v-switch
-                            v-model="item.bill"
+                            v-model="item.from_fiscal"
                             label="¿Requiere factura fiscal?"
                             color="info"
                             class="mt-0"
                             dense
                           />
                         </v-col>
-                        <v-col cols="12" v-if="item.bill">
+                        <v-col cols="12" v-if="item.from_fiscal">
                           <v-row dense>
                             <v-col cols="12" md="6">
                               <v-text-field
@@ -350,9 +350,12 @@ export default {
             }
           }
 
-          if (this.item.bill == null) {
-            this.item.bill = false;
+          if (this.item.from_fiscal == null) {
+            this.item.from_fiscal = false;
           }
+
+          this.getFiscalRegimes(true);
+          this.getFiscalUses(true);
 
           this.ldg = false;
         })
@@ -381,7 +384,7 @@ export default {
                     params: {
                       id: rsp.data.item.id,
                       msg: rsp.data.item.msg,
-                      charge: false,
+                      charge: true,
                     },
                   });
                   this.ldg = false;
@@ -396,9 +399,12 @@ export default {
         this.$root.$alert("error", "Revisa los detalles señalados");
       }
     },
-    getFiscalRegimes() {
-      this.item.patient.fiscal.fiscal_regime_id = null;
-      this.item.fiscal_use_id = null;
+    getFiscalRegimes(is_mounted = false) {
+      if (!is_mounted) {
+        this.item.patient.fiscal.fiscal_regime_id = null;
+        this.item.fiscal_use_id = null;
+      }
+
       this.fiscal_regimes = [];
       this.fiscal_regimes_ldg = true;
 
@@ -418,7 +424,11 @@ export default {
           this.fiscal_regimes_ldg = false;
         });
     },
-    getFiscalUses() {
+    getFiscalUses(is_mounted = false) {
+      if (!is_mounted) {
+        this.item.fiscal_use_id = null;
+      }
+
       Axios.get(
         URL_API +
           "/fiscal_uses" +
