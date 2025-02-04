@@ -1,4 +1,4 @@
-export const APP_VERSION = "Versión 1.02.03";
+export const APP_VERSION = "Versión 1.02.04";
 export const APP_NAME = "MEDICPAY";
 
 const URL = "http://127.0.0.1:8000";

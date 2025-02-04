@@ -48,6 +48,17 @@ const routes = [
     },
     props: true,
   },
+  {
+    path: "/modulo/consultas/:id/detalle",
+    name: "module/consultations.show",
+    component: () => import("@/views/module/ConsultationsShow.vue"),
+    meta: {
+      title: "Consulta | Detalle",
+      icon: "mdi-medical-bag",
+      middleware: module,
+    },
+    props: true,
+  },
   //doctor
   {
     path: "/medico/consultas",

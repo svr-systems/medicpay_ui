@@ -15,7 +15,7 @@
       <BtnTheme />
     </v-app-bar>
     <v-main>
-      <v-container fluid>
+      <v-container>
         <router-view :key="$route.fullPath" />
       </v-container>
     </v-main>

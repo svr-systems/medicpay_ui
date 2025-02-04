@@ -58,10 +58,44 @@
             <v-card>
               <v-card-title class="card_title_border">
                 <v-row dense>
-                  <v-col cols="9">
+                  <v-col cols="6">
                     <CardTitle text="COBRO" sub />
                   </v-col>
-                  <v-col cols="3" class="text-right" />
+                  <v-col cols="6" class="text-right">
+                    <BtnDoc
+                      lab="Recibo de pago"
+                      :val="item.payment_proof_b64"
+                      icon="file"
+                      color="pink"
+                    />
+                    <BtnDoc
+                      lab="Factura PDF"
+                      :val="item.invoice_pdf_b64"
+                      icon="file-pdf-box"
+                      color="teal"
+                    />
+                    <BtnDoc
+                      lab="Factura XML"
+                      :val="item.invoice_xml_b64"
+                      icon="file-xml-box"
+                      color="blue"
+                    />
+                    <v-tooltip left>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          v-on="on"
+                          icon
+                          small
+                          color="warning"
+                          class="ml-1"
+                          @click.prevent="invoiceEmail"
+                        >
+                          <v-icon small> mdi-email-arrow-right </v-icon>
+                        </v-btn>
+                      </template>
+                      Reenviar Factura a E-mail
+                    </v-tooltip>
+                  </v-col>
                 </v-row>
               </v-card-title>
               <v-card-text>
@@ -174,27 +208,6 @@
               </v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="12" md="6">
-            <v-file-input
-              v-model="item.payment_proof_doc"
-              label="Archivo"
-              dense
-              outlined
-              :rules="rules.docLmt"
-              show-size
-              prepend-icon=""
-              accept=".jpg,.jpeg,.png,.pdf"
-            >
-            </v-file-input>
-          </v-col>
-          <v-col cols="12" md="6">
-            <div>
-              <v-btn block color="pink" dark @click.prevent="store">
-                Cargar
-                <v-icon right> mdi-file-upload </v-icon>
-              </v-btn>
-            </div>
-          </v-col>
         </v-row>
       </v-form>
     </v-card-text>
@@ -202,26 +215,19 @@
 </template>
 
 <script>
-import {
-  URL_API,
-  getHdrs,
-  getRsp,
-  getErr,
-  getRules,
-  getObj,
-  getAmountFormat,
-  getFormData,
-} from "@/exports";
+import { URL_API, getHdrs, getRsp, getErr, getAmountFormat } from "@/exports";
 import Axios from "axios";
 import BtnBack from "@/components/BtnBack.vue";
 import CardTitle from "@/components/CardTitle.vue";
 import VisVal from "@/components/VisVal.vue";
+import BtnDoc from "@/components/BtnDoc.vue";
 
 export default {
   components: {
     BtnBack,
     CardTitle,
     VisVal,
+    BtnDoc,
   },
   data() {
     return {
@@ -230,7 +236,6 @@ export default {
       auth: this.$store.getters.getAuth,
       ldg: true,
       item: null,
-      rules: getRules(),
       //CATALOGS
       //OTHERS
       getAmountFormat: getAmountFormat,
@@ -252,25 +257,20 @@ export default {
           this.$root.$alert("error", getErr(err));
         });
     },
-    store() {
-      if (this.$refs.item_form.validate()) {
-        this.$root.$confirm("Cargar recibo de pago?").then((confirmed) => {
+    invoiceEmail() {
+      this.$root
+        .$confirm("Reenviar factura a email: " + this.item.patient.user.email)
+        .then((confirmed) => {
           if (confirmed) {
             this.ldg = true;
-            let obj = getObj(this.item, true);
 
-            Axios.post(
-              URL_API + "/" + this.route + "/payment_proof",
-              getFormData(obj),
+            Axios.get(
+              URL_API + "/" + this.route + "/" + this.id + "/invoice_email",
               getHdrs(this.auth.token, true)
             )
               .then((rsp) => {
                 rsp = getRsp(rsp);
                 this.$root.$alert("success", rsp.msg);
-                this.$router.push({
-                  name: this.route + ".show",
-                  params: { id: rsp.data.item.id },
-                });
                 this.ldg = false;
               })
               .catch((err) => {
@@ -279,9 +279,6 @@ export default {
               });
           }
         });
-      } else {
-        this.$root.$alert("error", "Revisa los detalles señalados");
-      }
     },
   },
   mounted() {

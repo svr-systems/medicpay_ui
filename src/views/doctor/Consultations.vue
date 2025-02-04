@@ -126,6 +126,11 @@ export default {
         filterable: true,
       },
       {
+        value: "patient_id",
+        text: "IDP",
+        filterable: true,
+      },
+      {
         value: "consultation_amount",
         text: "Monto",
         filterable: true,

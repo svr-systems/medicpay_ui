@@ -1,272 +1,262 @@
 <template>
-  <v-container>
-    <v-row dense justify="center">
-      <v-col cols="12">
-        <v-card elevation="24" :disabled="ldg" :loading="ldg">
-          <v-card-title>
-            <v-row dense>
-              <v-col cols="8">
-                <BtnBack :route="{ name: route }" />
-                <CardTitle :text="$route.meta.title" :icon="$route.meta.icon" />
-              </v-col>
-              <v-col cols="4" class="text-right" />
-            </v-row>
-          </v-card-title>
-          <v-card-text v-if="item">
-            <v-form v-on:submit.prevent ref="item_form" lazy-validation>
-              <v-row>
-                <v-col cols="12">
-                  <v-card>
-                    <v-card-title class="card_title_border">
-                      <v-row dense>
-                        <v-col cols="8">
-                          <CardTitle text="CONSULTA" sub />
-                        </v-col>
-                        <v-col cols="4" class="text-right" />
-                      </v-row>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-row dense>
-                        <v-col cols="12" md="4">
-                          <VisVal
-                            lab="Folio"
-                            :val="item.folio"
-                            :sub="item.created_at"
-                          />
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <VisVal
-                            lab="Médico"
-                            :val="item.doctor.user.full_name"
-                            :sub="'IDM ' + item.doctor_id"
-                          />
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <VisVal
-                            lab="Paciente"
-                            :val="item.patient.user.full_name"
-                            :sub="
-                              'IDP ' +
-                              item.patient_id +
-                              ' | Tel. ' +
-                              item.patient.user.movil_phone
-                            "
-                          />
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-                <v-col cols="12">
-                  <v-card>
-                    <v-card-title class="card_title_border">
-                      <v-row dense>
-                        <v-col cols="9">
-                          <CardTitle text="COBRO" sub />
-                        </v-col>
-                        <v-col cols="3" class="text-right" />
-                      </v-row>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-row dense>
-                        <v-col cols="12" class="text-center">
-                          <div
-                            class="text-caption font-weight-bold"
-                            v-text="'MONTO'"
-                          />
-                          <div
-                            class="display-3 pb-4"
-                            v-text="getAmountFormat(item.amount)"
-                          />
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-text-field
-                            v-model="item.patient.user.email"
-                            label="E-mail del paciente"
-                            dense
-                            outlined
-                            type="text"
-                            :rules="rules.email"
-                            maxlength="65"
-                            counter
-                          />
-                        </v-col>
-                        <v-col cols="12" md="4">
-                          <v-select
-                            v-model="item.fiscal_payment_id"
-                            label="Forma de pago"
-                            dense
-                            outlined
-                            :rules="rules.required"
-                            :items="fiscal_payments"
-                            :item-text="(v) => v.code + ' | ' + v.name"
-                            item-value="id"
-                            :loading="fiscal_payments_ldg"
-                          />
-                        </v-col>
-                        <v-col
-                          cols="12"
-                          md="4"
-                          v-if="item.fiscal_payment_id == 3"
-                        >
-                          <v-text-field
-                            v-model="item.reference"
-                            label="Referencia"
-                            dense
-                            outlined
-                            :rules="rules.required"
-                            type="text"
-                            maxlength="20"
-                            counter
-                          />
-                        </v-col>
-                        <v-col
-                          cols="12"
-                          md="2"
-                          v-if="
-                            item.fiscal_payment_id == 4 ||
-                            item.fiscal_payment_id == 18
-                          "
-                        >
-                          <v-text-field
-                            v-model="item.aprobattion"
-                            label="Núm. aprobación"
-                            dense
-                            outlined
-                            :rules="rules.required"
-                            type="text"
-                            maxlength="10"
-                            counter
-                          />
-                        </v-col>
-                        <v-col
-                          cols="12"
-                          md="2"
-                          v-if="
-                            item.fiscal_payment_id == 4 ||
-                            item.fiscal_payment_id == 18
-                          "
-                        >
-                          <v-text-field
-                            v-model="item.card"
-                            label="Tarjeta (4 últ. dig.)"
-                            dense
-                            outlined
-                            :rules="rules.required"
-                            type="text"
-                            maxlength="4"
-                            counter
-                          />
-                        </v-col>
-                        <v-col cols="12" md="5">
-                          <v-switch
-                            v-model="item.from_fiscal"
-                            label="¿Requiere factura fiscal?"
-                            color="info"
-                            class="mt-0"
-                            dense
-                          />
-                        </v-col>
-                        <v-col cols="12" v-if="item.from_fiscal">
-                          <v-row dense>
-                            <v-col cols="12" md="6">
-                              <v-text-field
-                                v-model="item.patient.fiscal.name"
-                                label="Nombre | Razón social"
-                                dense
-                                outlined
-                                :rules="rules.required"
-                                type="text"
-                                maxlength="75"
-                                counter
-                              />
-                            </v-col>
-                            <v-col cols="12" md="3">
-                              <v-text-field
-                                v-model="item.patient.fiscal.code"
-                                label="RFC"
-                                dense
-                                outlined
-                                :rules="rules.required"
-                                type="text"
-                                maxlength="13"
-                                counter
-                              />
-                            </v-col>
-                            <v-col cols="12" md="3">
-                              <v-text-field
-                                v-model="item.patient.fiscal.zip"
-                                label="C. P."
-                                dense
-                                outlined
-                                :rules="rules.required"
-                                type="text"
-                                maxlength="5"
-                                counter
-                              />
-                            </v-col>
-                            <v-col cols="12" md="3">
-                              <v-select
-                                v-model="item.patient.fiscal.fiscal_type_id"
-                                label="Tipo Fiscal*"
-                                dense
-                                outlined
-                                :rules="rules.required"
-                                :items="fiscal_types"
-                                :item-text="(v) => v.name"
-                                item-value="id"
-                                :loading="fiscal_types_ldg"
-                                @change="getFiscalRegimes()"
-                              />
-                            </v-col>
-                            <v-col cols="12" md="6">
-                              <v-autocomplete
-                                v-model="item.patient.fiscal.fiscal_regime_id"
-                                label="Regimen Fiscal"
-                                dense
-                                outlined
-                                :rules="rules.required"
-                                :items="fiscal_regimes"
-                                :item-text="(v) => v.code + ' | ' + v.name"
-                                item-value="id"
-                                :loading="fiscal_regimes_ldg"
-                                @change="getFiscalUses()"
-                              />
-                            </v-col>
-                            <v-col cols="12" md="3">
-                              <v-autocomplete
-                                v-model="item.fiscal_use_id"
-                                label="Uso CFDI"
-                                dense
-                                outlined
-                                :rules="rules.required"
-                                :items="fiscal_uses"
-                                :item-text="(v) => v.code + ' | ' + v.name"
-                                item-value="id"
-                                :loading="fiscal_uses_ldg"
-                              />
-                            </v-col>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </v-card>
-                </v-col>
-                <v-col cols="12">
-                  <div>
-                    <v-btn block color="warning" @click.prevent="store">
-                      Guardar
-                      <v-icon right> mdi-account-cash </v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-card elevation="24" :disabled="ldg" :loading="ldg">
+    <v-card-title>
+      <v-row dense>
+        <v-col cols="8">
+          <BtnBack :route="{ name: route }" />
+          <CardTitle :text="$route.meta.title" :icon="$route.meta.icon" />
+        </v-col>
+        <v-col cols="4" class="text-right" />
+      </v-row>
+    </v-card-title>
+    <v-card-text v-if="item">
+      <v-form v-on:submit.prevent ref="item_form" lazy-validation>
+        <v-row>
+          <v-col cols="12">
+            <v-card>
+              <v-card-title class="card_title_border">
+                <v-row dense>
+                  <v-col cols="8">
+                    <CardTitle text="CONSULTA" sub />
+                  </v-col>
+                  <v-col cols="4" class="text-right" />
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <v-row dense>
+                  <v-col cols="12" md="4">
+                    <VisVal
+                      lab="Folio"
+                      :val="item.folio"
+                      :sub="item.created_at"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <VisVal
+                      lab="Médico"
+                      :val="item.doctor.user.full_name"
+                      :sub="'IDM ' + item.doctor_id"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <VisVal
+                      lab="Paciente"
+                      :val="item.patient.user.full_name"
+                      :sub="
+                        'IDP ' +
+                        item.patient_id +
+                        ' | Tel. ' +
+                        item.patient.user.movil_phone
+                      "
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <v-card>
+              <v-card-title class="card_title_border">
+                <v-row dense>
+                  <v-col cols="9">
+                    <CardTitle text="COBRO" sub />
+                  </v-col>
+                  <v-col cols="3" class="text-right" />
+                </v-row>
+              </v-card-title>
+              <v-card-text>
+                <v-row dense>
+                  <v-col cols="12" class="text-center">
+                    <div
+                      class="text-caption font-weight-bold"
+                      v-text="'MONTO'"
+                    />
+                    <div
+                      class="display-3 pb-4"
+                      v-text="getAmountFormat(item.amount)"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      v-model="item.patient.user.email"
+                      label="E-mail del paciente"
+                      dense
+                      outlined
+                      type="text"
+                      :rules="rules.email"
+                      maxlength="65"
+                      counter
+                    />
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-select
+                      v-model="item.fiscal_payment_id"
+                      label="Forma de pago"
+                      dense
+                      outlined
+                      :rules="rules.required"
+                      :items="fiscal_payments"
+                      :item-text="(v) => v.code + ' | ' + v.name"
+                      item-value="id"
+                      :loading="fiscal_payments_ldg"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="4" v-if="item.fiscal_payment_id == 3">
+                    <v-text-field
+                      v-model="item.reference"
+                      label="Referencia"
+                      dense
+                      outlined
+                      :rules="rules.required"
+                      type="text"
+                      maxlength="20"
+                      counter
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="2"
+                    v-if="
+                      item.fiscal_payment_id == 4 ||
+                      item.fiscal_payment_id == 18
+                    "
+                  >
+                    <v-text-field
+                      v-model="item.aprobattion"
+                      label="Núm. aprobación"
+                      dense
+                      outlined
+                      :rules="rules.required"
+                      type="text"
+                      maxlength="10"
+                      counter
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    md="2"
+                    v-if="
+                      item.fiscal_payment_id == 4 ||
+                      item.fiscal_payment_id == 18
+                    "
+                  >
+                    <v-text-field
+                      v-model="item.card"
+                      label="Tarjeta (4 últ. dig.)"
+                      dense
+                      outlined
+                      :rules="rules.required"
+                      type="text"
+                      maxlength="4"
+                      counter
+                    />
+                  </v-col>
+                  <v-col cols="12" md="5">
+                    <v-switch
+                      v-model="item.from_fiscal"
+                      label="¿Requiere factura fiscal?"
+                      color="info"
+                      class="mt-0"
+                      dense
+                    />
+                  </v-col>
+                  <v-col cols="12" v-if="item.from_fiscal">
+                    <v-row dense>
+                      <v-col cols="12" md="6">
+                        <v-text-field
+                          v-model="item.patient.fiscal.name"
+                          label="Nombre | Razón social"
+                          dense
+                          outlined
+                          :rules="rules.required"
+                          type="text"
+                          maxlength="75"
+                          counter
+                        />
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-text-field
+                          v-model="item.patient.fiscal.code"
+                          label="RFC"
+                          dense
+                          outlined
+                          :rules="rules.required"
+                          type="text"
+                          maxlength="13"
+                          counter
+                        />
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-text-field
+                          v-model="item.patient.fiscal.zip"
+                          label="C. P."
+                          dense
+                          outlined
+                          :rules="rules.required"
+                          type="text"
+                          maxlength="5"
+                          counter
+                        />
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-select
+                          v-model="item.patient.fiscal.fiscal_type_id"
+                          label="Tipo Fiscal*"
+                          dense
+                          outlined
+                          :rules="rules.required"
+                          :items="fiscal_types"
+                          :item-text="(v) => v.name"
+                          item-value="id"
+                          :loading="fiscal_types_ldg"
+                          @change="getFiscalRegimes()"
+                        />
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-autocomplete
+                          v-model="item.patient.fiscal.fiscal_regime_id"
+                          label="Regimen Fiscal"
+                          dense
+                          outlined
+                          :rules="rules.required"
+                          :items="fiscal_regimes"
+                          :item-text="(v) => v.code + ' | ' + v.name"
+                          item-value="id"
+                          :loading="fiscal_regimes_ldg"
+                          @change="getFiscalUses()"
+                        />
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-autocomplete
+                          v-model="item.fiscal_use_id"
+                          label="Uso CFDI"
+                          dense
+                          outlined
+                          :rules="rules.required"
+                          :items="fiscal_uses"
+                          :item-text="(v) => v.code + ' | ' + v.name"
+                          item-value="id"
+                          :loading="fiscal_uses_ldg"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <div>
+              <v-btn block color="warning" @click.prevent="store">
+                Guardar
+                <v-icon right> mdi-account-cash </v-icon>
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

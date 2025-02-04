@@ -1,5 +1,5 @@
 <template>
-  <v-card flat>
+  <v-card elevation="24">
     <v-card-title class="p-0">
       <v-row dense>
         <v-col cols="8" class="subtitle-1">

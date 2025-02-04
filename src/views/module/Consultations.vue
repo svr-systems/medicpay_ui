@@ -1,18 +1,18 @@
 <template>
-  <v-card flat :disabled="ldg">
+  <v-card elevation="24" :disabled="ldg">
     <v-card-title>
       <v-row dense>
         <v-col cols="8">
           <CardTitle :text="$route.meta.title" :icon="$route.meta.icon" />
         </v-col>
-        <v-col cols="4" class="text-right"> </v-col>
+        <v-col cols="4" class="text-right" />
       </v-row>
     </v-card-title>
     <v-card-text>
       <v-row dense>
-        <v-col cols="12" md="10">
+        <v-col cols="12" md="9" class="pb-0">
           <v-row dense>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6" class="pb-0">
               <v-select
                 v-model="filter"
                 label="Filtro"
@@ -20,15 +20,31 @@
                 :items="filters"
                 :item-text="(v) => v.name"
                 item-value="id"
-                @change="getItems"
+                :disabled="items.length > 0"
+              />
+            </v-col>
+            <v-col v-if="filter == 4" cols="12" md="3" class="pb-0">
+              <InpDate
+                :model.sync="start"
+                label="F. inicial"
+                before
+                :disabled="items.length > 0"
+              />
+            </v-col>
+            <v-col v-if="filter == 4" cols="12" md="3" class="pb-0">
+              <InpDate
+                :model.sync="end"
+                label="F. final"
+                before
+                :disabled="items.length > 0"
               />
             </v-col>
           </v-row>
         </v-col>
-        <v-col cols="12" md="2">
+        <v-col cols="12" md="3" class="pb-0">
           <v-text-field
             v-model="items_srch"
-            label="Buscar..."
+            label="Buscar en resultados..."
             dense
             type="text"
             single-line
@@ -38,6 +54,23 @@
               <v-icon small> mdi-magnify </v-icon>
             </template>
           </v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-btn
+            v-if="items.length == 0"
+            block
+            color="info"
+            x-small
+            :loading="ldg"
+            @click.prevent="getItems"
+          >
+            Aplicar parametros
+            <v-icon x-small right> mdi-database-search-outline </v-icon>
+          </v-btn>
+          <v-btn v-else block x-small @click.prevent="items = []">
+            Cambiar parametros
+            <v-icon x-small right> mdi-database-refresh-outline </v-icon>
+          </v-btn>
         </v-col>
         <v-col v-if="rsp" cols="12">
           <v-alert dense outlined text shaped dismissible type="success">
@@ -57,7 +90,7 @@
                   }"
                 >
                   Cargar recibo de pago
-                  <v-icon x-small right> mdi-progress-upload </v-icon>
+                  <v-icon x-small right> mdi-file-upload </v-icon>
                 </v-btn>
               </v-col>
             </v-row>
@@ -109,14 +142,22 @@
                         params: { id: item.id },
                       }"
                     >
-                      <v-icon small> mdi-progress-upload </v-icon>
+                      <v-icon small> mdi-file-upload </v-icon>
                     </v-btn>
                   </template>
                   Cargar recibo de pago
                 </v-tooltip>
                 <v-tooltip v-if="item.amount && item.payment_proof" left>
                   <template v-slot:activator="{ on }">
-                    <v-btn v-on="on" icon small>
+                    <v-btn
+                      v-on="on"
+                      icon
+                      small
+                      :to="{
+                        name: route + '.show',
+                        params: { id: item.id },
+                      }"
+                    >
                       <v-icon small> mdi-file-eye </v-icon>
                     </v-btn>
                   </template>
@@ -132,13 +173,22 @@
 </template>
 
 <script>
-import { URL_API, getHdrs, getRsp, getErr, getAmountFormat } from "@/exports";
+import {
+  URL_API,
+  getHdrs,
+  getRsp,
+  getErr,
+  getAmountFormat,
+  getDateTime,
+} from "@/exports";
 import Axios from "axios";
 import CardTitle from "@/components/CardTitle.vue";
+import InpDate from "@/components/InpDate.vue";
 
 export default {
   components: {
     CardTitle,
+    InpDate,
   },
   data() {
     return {
@@ -169,6 +219,8 @@ export default {
         },
       ],
       //OTHERS
+      start: "",
+      end: "",
       getAmountFormat: getAmountFormat,
       rsp: null,
     };
@@ -179,7 +231,15 @@ export default {
       this.items = [];
 
       Axios.get(
-        URL_API + "/" + this.route + "?filter=" + this.filter,
+        URL_API +
+          "/" +
+          this.route +
+          "?filter=" +
+          this.filter +
+          "&start=" +
+          this.start +
+          "&end=" +
+          this.end,
         getHdrs(this.auth.token)
       )
         .then((rsp) => {
@@ -196,39 +256,44 @@ export default {
   mounted() {
     this.items_hdrs = [
       {
-        value: "key",
         text: "#",
+        value: "key",
         filterable: false,
         width: "60",
       },
       {
-        value: "folio",
         text: "Folio",
+        value: "folio",
         filterable: true,
       },
       {
-        value: "doctor.user.full_name",
+        text: "Registro",
+        value: "created_at",
+        filterable: true,
+      },
+      {
         text: "Médico",
+        value: "doctor.user.full_name",
         filterable: true,
       },
       {
-        value: "doctor_id",
         text: "IDM",
+        value: "doctor_id",
         filterable: true,
       },
       {
-        value: "patient.user.full_name",
         text: "Paciente",
+        value: "patient.user.full_name",
         filterable: true,
       },
       {
-        value: "patient_id",
         text: "IDP",
+        value: "patient_id",
         filterable: true,
       },
       {
-        value: "action",
         text: "",
+        value: "action",
         filterable: false,
         sortable: false,
         width: "60",
@@ -242,6 +307,9 @@ export default {
         charge: this.$route.params.charge,
       };
     }
+
+    this.start = getDateTime().substring(0, 8) + "01";
+    this.end = getDateTime().substring(0, 10);
 
     this.getItems();
   },
