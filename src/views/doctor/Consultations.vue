@@ -1,5 +1,5 @@
 <template>
-  <v-card flat :disabled="ldg">
+  <v-card elevation="24" :disabled="ldg">
     <v-card-title>
       <v-row dense>
         <v-col cols="8">
@@ -59,7 +59,25 @@
               {{ getAmountFormat(item.consultation_amount) }}
             </template>
             <template v-slot:item.action="{ item }">
-              <div class="text-right"></div>
+              <div class="text-right">
+                <v-tooltip v-if="item.invoice_id" left>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-on="on"
+                      icon
+                      small
+                      color="warning"
+                      :to="{
+                        name: route + '.bill',
+                        params: { id: item.id },
+                      }"
+                    >
+                      <v-icon small> mdi-folder-arrow-up </v-icon>
+                    </v-btn>
+                  </template>
+                  Cargar Factura
+                </v-tooltip>
+              </div>
             </template>
           </v-data-table>
         </v-col>
@@ -110,35 +128,35 @@ export default {
   mounted() {
     this.items_hdrs = [
       {
-        value: "key",
         text: "#",
+        value: "key",
         filterable: false,
+        sortable: false,
         width: "60",
       },
       {
-        value: "folio",
         text: "Folio",
-        filterable: true,
+        value: "folio",
+      },
+      {
+        text: "F. registro",
+        value: "created_at",
       },
       {
         value: "patient.user.full_name",
         text: "Nombre",
-        filterable: true,
       },
       {
-        value: "patient_id",
         text: "IDP",
-        filterable: true,
+        value: "patient_id",
       },
       {
-        value: "consultation_amount",
         text: "Monto",
-        filterable: true,
+        value: "consultation_amount",
       },
       {
-        value: "status",
         text: "Estado",
-        filterable: true,
+        value: "status",
       },
       {
         value: "action",

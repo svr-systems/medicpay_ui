@@ -80,6 +80,17 @@ const routes = [
       middleware: doctor,
     },
   },
+  {
+    path: "/medico/consultas/:id/factura",
+    name: "doctor/consultations.bill",
+    component: () => import("@/views/doctor/ConsultationsBill.vue"),
+    meta: {
+      title: "Consulta | Factura",
+      icon: "mdi-medical-bag",
+      middleware: doctor,
+    },
+    props: true,
+  },
   //patients
   {
     path: "/pacientes",

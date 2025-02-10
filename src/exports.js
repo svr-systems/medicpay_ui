@@ -267,7 +267,9 @@ export const getBlob = (b64, ext) => {
 };
 
 export const getAmountFormat = (v) => {
-  return Number(parseFloat(v).toFixed(2)).toLocaleString("en-US", {
+  return Number(
+    parseFloat(v == null || v == "" ? 0 : v).toFixed(2)
+  ).toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
   });
